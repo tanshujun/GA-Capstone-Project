@@ -1,0 +1,31 @@
+classWeightsGender = {0: 0.620,
+                      1: 0.380}
+
+checkpointPath1 = '/content/gdrive/My Drive/Google_Collab/CNNModelsGender/cnnModelGender1.h5'
+
+keras_callbacks1   = [
+      EarlyStopping(monitor='val_loss', patience=20, mode='min', min_delta=0.0001),
+      ModelCheckpoint(checkpointPath1, monitor='val_loss', save_best_only=True, mode='min')
+]
+
+cnnModelGender = Sequential()
+cnnModelGender.add(Conv2D(filters=8, kernel_size=3, activation='relu', input_shape=(150,150,1))) 
+cnnModelGender.add(BatchNormalization())
+cnnModelGender.add(MaxPooling2D(pool_size=(2,2)))
+cnnModelGender.add(Conv2D(filters=16, kernel_size=3, activation='relu'))
+cnnModelGender.add(BatchNormalization())
+cnnModelGender.add(MaxPooling2D(pool_size=(2,2)))
+cnnModelGender.add(Flatten())
+cnnModelGender.add(Dense(128, activation='relu'))
+cnnModelGender.add(Dropout(0.5))
+cnnModelGender.add(Dense(1, activation='sigmoid'))
+cnnModelGender.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+historyGender = cnnModelGender.fit(xTrainGender, yTrainGender, 
+                                   validation_data=(xTestGender, yTestGender),
+                                   batch_size=16,
+                                   class_weight=classWeightsGender,
+                                   callbacks=keras_callbacks1, 
+                                   epochs=100,
+                                   verbose=2)
+

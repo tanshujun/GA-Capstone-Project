@@ -1,0 +1,25 @@
+checkpointPath1 = '/content/gdrive/My Drive/Google_Collab/CNNModelsAge/cnnModelAge1.h5'
+
+keras_callbacks1   = [
+      EarlyStopping(monitor='val_loss', patience=20, mode='min', min_delta=0.0001),
+      ModelCheckpoint(checkpointPath1, monitor='val_loss', save_best_only=True, mode='min')
+]
+
+cnnModelAge = Sequential()
+cnnModelAge.add(Conv2D(filters=8, kernel_size=3, activation='relu', input_shape=(150,150,1))) 
+cnnModelAge.add(BatchNormalization())
+cnnModelAge.add(MaxPooling2D(pool_size=(2,2)))
+cnnModelAge.add(Conv2D(filters=16, kernel_size=3, activation='relu'))
+cnnModelAge.add(BatchNormalization())
+cnnModelAge.add(MaxPooling2D(pool_size=(2,2)))
+cnnModelAge.add(Flatten())
+cnnModelAge.add(Dense(128, activation='relu'))
+cnnModelAge.add(Dropout(0.5))
+cnnModelAge.add(Dense(1))
+cnnModelAge.compile(loss='mse', optimizer='adam', metrics=['mae'])
+
+
+Train mse: 5.172914668705388
+Train mae: 1.7462737421024899
+Test mse: 21.024767638044896
+Test mae: 3.1520488135442384

@@ -1,0 +1,66 @@
+Best performing model chosen hyper-parameters:
+{'Dense': 0, 'Dense_1': 1, 'Dense_2': 1, 'Dense_3': 2, 'Dropout': 1, 'Dropout_1': 1, 'Dropout_2': 1, 'Dropout_3': 0, 'Dropout_4': 0, 'batch_size': 1, 'filters': 0, 'filters_1': 1, 'kernel_size': 0, 'kernel_size_1': 1, 'lr': 1}
+
+Train loss: 0.3020991001279304
+Train accuracy: 0.9178197064989518
+Test loss: 0.7600245685672443
+Test accuracy: 0.7275747506325427
+
+max_evals=50, best_run=21
+
+
+   1: def keras_fmin_fnct(space):
+   2: 
+   3:     cnnModelEmotion = Sequential()
+   4:     cnnModelEmotion = Sequential()
+   5:     cnnModelEmotion.add(Conv2D(filters=8, kernel_size=3, activation='relu', input_shape=(150,150,1)))
+   6:     cnnModelEmotion.add(BatchNormalization())
+   7:     cnnModelEmotion.add(MaxPooling2D(pool_size=(2,2)))
+   8:     cnnModelEmotion.add(Conv2D(filters=space['filters': 8,16,32], kernel_size=space['kernel_size': 3,5], activation='relu'))
+   9:     cnnModelEmotion.add(BatchNormalization())
+  10:     cnnModelEmotion.add(MaxPooling2D(pool_size=(2,2)))
+  11:     cnnModelEmotion.add(Conv2D(filters=space['filters_1': 8,16,32], kernel_size=space['kernel_size_1': 5,7], activation='relu'))
+  12:     cnnModelEmotion.add(BatchNormalization())
+  13:     cnnModelEmotion.add(MaxPooling2D(pool_size=(2,2)))
+  14:     cnnModelEmotion.add(Flatten())
+  15: 
+  16:     cnnModelEmotion.add(Dense(space['Dense': 512,256,128], activation='relu'))
+  17:     cnnModelEmotion.add(Dropout(space['Dropout': 0.2,0.5]))
+  18:     cnnModelEmotion.add(Dense(space['Dense_1': 256,128,64], activation='relu'))
+  19:     cnnModelEmotion.add(Dropout(space['Dropout_1': 0.2,0.5]))
+  20:     cnnModelEmotion.add(Dense(space['Dense_2': 128,64,32], activation='relu'))
+  21:     cnnModelEmotion.add(Dropout(space['Dropout_2': 0.2,0.5]))
+  22: 
+  23:     if space['Dropout_3': "three","four"] == 'four':
+  24:       cnnModelEmotion.add(Dense(space['Dense_3': 64,32,16], activation='relu'))
+  25:       cnnModelEmotion.add(Dropout(space['Dropout_4': 0.2,0.5]))
+  26: 
+  27:     cnnModelEmotion.add(Dense(4, activation='softmax'))
+  28:     
+  29:     Ad = optimizers.Adam(lr=space['lr': 0.01,0.001], beta_1=0.9, beta_2=0.999, amsgrad=False)
+  30:     cnnModelEmotion.compile(loss='categorical_crossentropy', optimizer=Ad, metrics=['accuracy'])
+  31: 
+  32:     y_integers = np.argmax(yTestEmotion, axis=1)
+  33:     classWeights = compute_class_weight('balanced', np.unique(y_integers), y_integers)
+  34:     classWeightsEmotion = dict(enumerate(classWeights))
+  35: 
+  36:     globalVars.globalVar += 1
+  37:     checkpointPath = '/content/gdrive/My Drive/Google_Collab/CNNModelsEmotion/Hyperas/BatchNormalisation/TestClassWeights/hyperasEmotion' + str(globalVars.globalVar) + '.h5'
+  38: 
+  39:     keras_callbacks   = [
+  40:           EarlyStopping(monitor='val_loss', patience=20, mode='min', min_delta=0.0001),
+  41:           ModelCheckpoint(checkpointPath, monitor='val_loss', save_best_only=True, mode='min')
+  42:     ]
+  43: 
+  44:     result = cnnModelEmotion.fit(xTrainEmotionExtraData, yTrainEmotionExtraData, 
+  45:                                  validation_data=(xTestEmotion, yTestEmotion), 
+  46:                                  epochs=100, 
+  47:                                  batch_size=space['batch_size': 8,16],
+  48:                                  class_weight=classWeightsEmotion,
+  49:                                  callbacks=keras_callbacks, 
+  50:                                  verbose=0)
+  51:     
+  52:     valLoss = np.amin(result.history['val_loss'])
+  53:     print('Best validation loss of epoch:', valLoss)
+  54: 
+  55:     return {'loss':valLoss, 'status':STATUS_OK, 'model':cnnModelEmotion}
