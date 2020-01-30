@@ -41,3 +41,9 @@ The gender detection model achieved an overall classification accuracy of 93.6%,
 **Deployment**
 
 The models developed were combined for deployment to a prototype Telegram bot @FaceClassificationBot using Flask/Heroku, for real-time prediction of a person’s emotions, gender and age based on the image provided by the user.
+
+**Limitations**
+
+- Models are trained on the SoF dataset, which is not representative of population (most volunteers were from Egypt - very few Asians, age range mostly between 20-35 years old - model performs poorly on very young (e.g. babies) or very old people
+- Emotions are complex, even humans get it wrong sometimes
+- Challenging to judge someone's emotions just by their facial expressions (consider body language, choice of words, tone of voice as well)
