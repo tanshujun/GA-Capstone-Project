@@ -44,6 +44,6 @@ The models developed were combined for deployment to a prototype Telegram bot @F
 
 **Limitations**
 
-- Models are trained on the SoF dataset, which is not representative of population (most volunteers were from Egypt - very few Asians, age range mostly between 20-35 years old - model performs poorly on very young (e.g. babies) or very old people
+- Models are trained on the SoF dataset, which is not representative of population: 1) most volunteers were from Egypt (very few Asians), 2) age range mostly between 20-35 years old (model performs poorly on very young (e.g. babies) or very old people)
 - Emotions are complex, even humans get it wrong sometimes
 - Challenging to judge someone's emotions just by their facial expressions (consider body language, choice of words, tone of voice as well)
